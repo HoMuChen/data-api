@@ -76,7 +76,7 @@ const getAll = async ({ table, page=1, size=10, db=dbConfig.db, host=dbConfig.ho
 
   const conn = await getConn(host, port, db);
 
-  const cur = await r.table(table).skip(page*size).limit(size).run(conn);
+  const cur = await r.table(table).skip( (page-1)*size ).limit(size).run(conn);
   const docs = await cur.toArray()
   await conn.close();
 
@@ -90,7 +90,7 @@ const getNear = async ({ table, latitude, longitude , n=1, db=dbConfig.db, host=
 
   const conn = await getConn(host, port, db);
 
-  const cur = await r.table(table).getNearest(r.point(longitude, latitude), { index: 'location', maxResults: n }).run(conn);
+  const cur = await r.table(table).getNearest(r.point(longitude, latitude), { index: 'location', maxResults: n, maxDist: 1000 }).run(conn);
   const docs = await cur.toArray()
   await conn.close();
 
