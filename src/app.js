@@ -8,10 +8,13 @@ const {
   convenience_store,
   drink,
 } = require('./routes');
+const authToken = require('./middlewares/authToken');
 
 const app = new express();
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
+
+app.use('/api', authToken);
 
 app.use('/api/ubike',                ubike);
 app.use('/api/toilet',               toilet);
